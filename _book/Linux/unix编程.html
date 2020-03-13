@@ -413,9 +413,9 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.8" data-path="./">
+        <li class="chapter active" data-level="1.8" data-path="unix编程.html">
             
-                <a href="./">
+                <a href="unix编程.html">
             
                     
                     Linux
@@ -484,7 +484,200 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="linux">Linux</h1>
+                                <h1 id="unix&#x7F16;&#x7A0B;">unix&#x7F16;&#x7A0B;</h1>
+<ol>
+<li><p>&#x4E00;&#x5207;&#x7686;&#x6587;&#x4EF6;</p>
+</li>
+<li><p>&#x76EE;&#x5F55;&#x64CD;&#x4F5C;</p>
+<ol>
+<li>ls</li>
+<li>cd</li>
+<li>pwd</li>
+<li>mkdir&#xFF0C;rmdir </li>
+</ol>
+</li>
+<li><p>&#x6587;&#x4EF6;&#x64CD;&#x4F5C;</p>
+<ol>
+<li>&#x547D;&#x4EE4;<ol>
+<li>cat&#xFF0C;more&#xFF0C;less&#xFF0C;pg&#x2014;&#x2014;&#x67E5;&#x770B;&#x6587;&#x4EF6;&#x5185;&#x5BB9;</li>
+<li>cp&#x2014;&#x2014;&#x590D;&#x5236;</li>
+<li>rm&#x2014;&#x2014;&#x5220;&#x9664;</li>
+<li>mv&#x2014;&#x2014;&#x79FB;&#x52A8;</li>
+<li>man&#x2014;&#x2014;&#x67E5;&#x770B;&#x8054;&#x673A;&#x5E2E;&#x52A9;</li>
+</ol>
+</li>
+<li>who&#x547D;&#x4EE4;<ol>
+<li>&#x901A;&#x8FC7;&#x8BFB;&#x6587;&#x4EF6;&#x6765;&#x83B7;&#x5F97;&#x9700;&#x8981;&#x7684;&#x4FE1;&#x606F;&#xFF0C;&#x6BCF;&#x4E2A;&#x767B;&#x5F55;&#x7684;&#x7528;&#x6237;&#x5728;&#x6587;&#x4EF6;&#x4E2D;&#x90FD;&#x6709;&#x7740;&#x5BF9;&#x5E94;&#x7684;&#x8BB0;&#x5F55;</li>
+</ol>
+</li>
+<li>&#x51FD;&#x6570;<ol>
+<li>open&#x6253;&#x5F00;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;</li>
+<li>read&#x4ECE;&#x6587;&#x4EF6;&#x4E2D;&#x8BFB;&#x53D6;&#x6570;&#x636E;</li>
+<li>close&#x5173;&#x95ED;&#x6587;&#x4EF6;</li>
+<li>create&#x521B;&#x5EFA;/&#x91CD;&#x5199;&#x6587;&#x4EF6;</li>
+<li>write&#x5199;&#x6587;&#x4EF6;</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>&#x5E94;&#x7528;&#x7F13;&#x51B2;&#x6280;&#x672F;&#x5BF9;&#x63D0;&#x9AD8;&#x7CFB;&#x7EDF;&#x7684;&#x6548;&#x7387;&#x662F;&#x5F88;&#x660E;&#x663E;&#x7684;&#xFF0C;&#x5B83;&#x7684;&#x4E3B;&#x8981;&#x601D;&#x60F3;&#x662F;&#x4E00;&#x6B21;&#x8BFB;&#x5165;&#x5927;&#x91CF;&#x7684;&#x6570;&#x636E;&#x653E;&#x5165;&#x7F13;&#x51B2;&#x533A;&#xFF0C;&#x9700;&#x8981;&#x7684;&#x65F6;&#x5019;&#x4ECE;&#x7F13;&#x51B2;&#x533A;&#x53D6;&#x5F97;&#x6570;&#x636E;</p>
+</li>
+<li><p>&#x76EE;&#x5F55;&#x4E0E;&#x6587;&#x4EF6;&#x5C5E;&#x6027;</p>
+<ol>
+<li><p>&#x51FD;&#x6570;</p>
+<ol>
+<li><p>opendir</p>
+</li>
+<li><p>readdir</p>
+</li>
+<li><p>closedir</p>
+</li>
+<li><p>seekdir&#xFF0C;telldir&#xFF0C;lseek</p>
+<pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">do_ls</span><span class="hljs-params">(<span class="hljs-keyword">char</span> [])</span></span>;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> ac,<span class="hljs-keyword">char</span> * av[])</span></span>{
+    <span class="hljs-keyword">if</span>(ac==<span class="hljs-number">1</span>){
+        do_ls(<span class="hljs-string">&quot;.&quot;</span>);
+    }
+    <span class="hljs-keyword">else</span>{
+        <span class="hljs-keyword">while</span>(--ac){
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s:\n&quot;</span>,*++av);
+            do_ls(*av);
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">do_ls</span><span class="hljs-params">(<span class="hljs-keyword">char</span> dirname[])</span></span>{
+    DIR *dir_ptr;
+    <span class="hljs-keyword">struct</span> dirent *direntp;
+    <span class="hljs-keyword">if</span>((dir_ptr=opendir(dirname))==<span class="hljs-literal">NULL</span>){
+        <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>,<span class="hljs-string">&quot;ls1:cannot open %s\n&quot;</span>,dirname);
+    }
+    <span class="hljs-keyword">else</span>{
+        <span class="hljs-keyword">while</span>((direntp=readdir(dir_ptr))!=<span class="hljs-literal">NULL</span>){
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>,direntp-&gt;d_name);
+        }
+        closedir(dir_ptr);
+    }
+}
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>&#x786C;&#x94FE;&#x63A5;&#x548C;&#x8F6F;&#x94FE;&#x63A5;</p>
+<ol>
+<li>A&#x662F;B&#x7684;&#x786C;&#x94FE;&#x63A5;&#xFF0C;&#x5219;A&#x7684;&#x76EE;&#x5F55;&#x9879;&#x4E2D;&#x7684;&#x8282;&#x70B9;&#x53F7;&#x4E0E;B&#x7684;&#x76EE;&#x5F55;&#x9879;&#x7684;&#x8282;&#x70B9;&#x53F7;&#x76F8;&#x540C;&#xFF0C;&#x5373;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x5BF9;&#x5E94;&#x4E24;&#x4E2A;&#x4E0D;&#x540C;&#x7684;&#x6587;&#x4EF6;&#x540D;&#xFF0C;&#x4E24;&#x4E2A;&#x6587;&#x4EF6;&#x540D;&#x6307;&#x5411;&#x540C;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#x3002;&#x5982;&#x679C;&#x5220;&#x9664;&#x4E86;&#x5176;&#x4E2D;&#x4E00;&#x4E2A;&#xFF0C;&#x5BF9;&#x53E6;&#x4E00;&#x4E2A;&#x6CA1;&#x6709;&#x5F71;&#x54CD;</li>
+<li>A&#x662F;B&#x7684;&#x8F6F;&#x94FE;&#x63A5;&#xFF0C;&#x5219;A&#x7684;&#x76EE;&#x5F55;&#x9879;&#x4E2D;&#x7684;&#x8282;&#x70B9;&#x53F7;&#x4E0E;B&#x7684;&#x76EE;&#x5F55;&#x9879;&#x7684;&#x8282;&#x70B9;&#x53F7;&#x4E0D;&#x540C;&#xFF0C;A&#x4E0E;B&#x6307;&#x5411;&#x4E24;&#x4E2A;&#x4E0D;&#x540C;&#x7684;&#x6570;&#x636E;&#x5757;&#xFF0C;&#x4F46;&#x662F;A&#x4E2D;&#x6570;&#x636E;&#x5757;&#x5B58;&#x653E;&#x7684;&#x53EA;&#x662F;B&#x7684;&#x8DEF;&#x5F84;&#x540D;&#xFF0C;&#x5982;&#x679C;B&#x5220;&#x9664;&#x4E86;&#xFF0C;A&#x4ECD;&#x7136;&#x5B58;&#x5728;&#xFF0C;&#x4F46;&#x662F;&#x6307;&#x5411;&#x7684;&#x662F;&#x4E00;&#x4E2A;&#x65E0;&#x6548;&#x7684;&#x94FE;&#x63A5;</li>
+</ol>
+</li>
+<li><p>shell &#x8FDB;&#x7A0B;&#x63A7;&#x5236;&#x548C;&#x7A0B;&#x5E8F;&#x63A7;&#x5236;&#x7684;&#x4E00;&#x4E2A;&#x5DE5;&#x5177;</p>
+<ol>
+<li><p>&#x4E00;&#x4E2A;&#x7A0B;&#x5E8F;&#x5982;&#x4F55;&#x8FD0;&#x884C;&#x53E6;&#x4E00;&#x4E2A;&#x7A0B;&#x5E8F;</p>
+<ol>
+<li><p>&#x7A0B;&#x5E8F;&#x8C03;&#x7528;execvp</p>
+<pre><code class="lang-c"><span class="hljs-keyword">char</span> *arglist[<span class="hljs-number">3</span>];
+arglist[<span class="hljs-number">0</span>] = <span class="hljs-string">&quot;ls&quot;</span>;
+arglist[<span class="hljs-number">1</span>] = <span class="hljs-string">&quot;-l&quot;</span>;
+arglist[<span class="hljs-number">2</span>] = <span class="hljs-number">0</span>; <span class="hljs-comment">//&#x6CE8;&#x610F;&#x7ED3;&#x5C3E;&#x4E3A;0</span>
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;About to exec ls -l\n&quot;</span>);
+execvp(arglist[<span class="hljs-number">0</span>],arglist);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;ls is done.bye\n&quot;</span>);
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p>&#x5982;&#x4F55;&#x5EFA;&#x7ACB;&#x65B0;&#x7684;&#x8FDB;&#x7A0B;</p>
+<ol>
+<li><p>&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x8C03;&#x7528;fork&#xFF08;&#xFF09;&#x6765;&#x590D;&#x5236;&#x81EA;&#x5DF1;</p>
+</li>
+<li><p>&#x8FDB;&#x7A0B;&#x8C03;&#x7528;fork&#xFF0C;&#x5F53;&#x63A7;&#x5236;&#x8F6C;&#x79FB;&#x5230;&#x5185;&#x6838;&#x4E2D;&#x7684;fork&#x4EE3;&#x7801;&#x4E4B;&#x540E;&#xFF0C;&#x5185;&#x6838;&#x5206;&#x914D;&#x65B0;&#x7684;&#x5185;&#x5B58;&#x5757;&#x548C;&#x5185;&#x6838;&#x6570;&#x636E;&#x7ED3;&#x6784;&#xFF0C;&#x590D;&#x5236;&#x539F;&#x6765;&#x7684;&#x8FDB;&#x7A0B;&#x5230;&#x65B0;&#x7684;&#x8FDB;&#x7A0B;&#xFF0C;&#x5411;&#x8FD0;&#x884C;&#x8FDB;&#x7A0B;&#x96C6;&#x6DFB;&#x52A0;&#x65B0;&#x7684;&#x8FDB;&#x7A0B;&#xFF0C;&#x5C06;&#x63A7;&#x5236;&#x8FD4;&#x56DE;&#x7ED9;&#x4E24;&#x4E2A;&#x8FDB;&#x7A0B;</p>
+</li>
+<li><p>&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x8FDB;&#x7A0B;</p>
+<pre><code class="lang-c"><span class="hljs-keyword">int</span> ret_from_fork,mypid;
+mypid = getpid(); <span class="hljs-comment">//jingchen ID</span>
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Before: my pid is %d\n&quot;</span>,mypid);
+
+ret_from_fork= fork();
+sleep(<span class="hljs-number">1</span>);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;After: my pid is %d,fork() said %d\n&quot;</span>,getpid(),ret_from_fork);
+</code></pre>
+<p>&#x65B0;&#x7684;&#x8FDB;&#x7A0B;&#x4ECE;fork&#x8FD4;&#x56DE;&#x7684;&#x5730;&#x65B9;&#x5F00;&#x59CB;&#x6267;&#x884C;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x4ECE;&#x5934;&#x5F00;&#x59CB;&#x6267;&#x884C;</p>
+<p>&#x6240;&#x4EE5;&#x6253;&#x5370;&#x4E00;&#x4E2A;before&#x548C;&#x4E24;&#x4E2A;After</p>
+</li>
+<li><p>&#x5B50;&#x8FDB;&#x7A0B;&#x521B;&#x5EFA;&#x8FDB;&#x7A0B;</p>
+<pre><code class="lang-c"><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;my pid is %d\n&quot;</span>,getpid());
+fork();
+fork();
+fork();
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;my pid is %d\n&quot;</span>,getpid());
+</code></pre>
+<p>&#x5171;&#x6253;&#x5370;&#x516B;&#x6B21;</p>
+</li>
+<li><p>&#x5206;&#x8FA8;&#x5B50;&#x8FDB;&#x7A0B;&#x548C;&#x7236;&#x8FDB;&#x7A0B;</p>
+<p>&#x5728;&#x5B50;&#x8FDB;&#x7A0B;&#x4E2D;fork&#xFF08;&#xFF09;&#x8FD4;&#x56DE;&#x4E3A;0</p>
+</li>
+</ol>
+</li>
+<li><p>&#x7236;&#x8FDB;&#x7A0B;&#x5982;&#x4F55;&#x7B49;&#x5F85;&#x5B50;&#x8FDB;&#x7A0B;&#x7684;&#x9000;&#x51FA;</p>
+<ol>
+<li><p>&#x8FDB;&#x7A0B;&#x8C03;&#x7528;wait&#x7B49;&#x5F85;&#x5B50;&#x8FDB;&#x7A0B;&#x9000;&#x51FA;</p>
+<pre><code class="lang-c">pid = wait(&amp;status)
+</code></pre>
+</li>
+<li><p>&#x7CFB;&#x7EDF;&#x8C03;&#x7528;wait&#x505A;&#x4E24;&#x4EF6;&#x4E8B;&#xFF0C;&#x9996;&#x5148;wait&#x6682;&#x505C;&#x8C03;&#x7528;&#x5B83;&#x7684;&#x8FDB;&#x7A0B;&#x76F4;&#x5230;&#x5B50;&#x8FDB;&#x7A0B;&#x7ED3;&#x675F;&#x3002;&#x7136;&#x540E;wait&#x53D6;&#x5F97;&#x5B50;&#x8FDB;&#x7A0B;&#x7ED3;&#x675F;&#x65F6;&#x4F20;&#x7ED9;exit&#x7684;&#x503C;</p>
+</li>
+<li><pre><code class="lang-c">int main(){
+    int newpid;
+    void child_code(),parent_code();
+
+    printf(&quot;before:mypid is %d\n&quot;,getpid());
+
+    if((newpid=fork())==-1)
+        perror(&quot;fork&quot;);
+    else if(newpid==0)
+        child_code(DELAY);
+    else
+        parent_code(newpid);
+}
+void child_code(int delay){
+    printf(&quot;child %d here\n&quot;,getpid());
+    sleep(DELAY);
+    exit(17);
+}
+void parent_code(int childpid){
+    int wait_rv;
+    printf(&quot;test\n&quot;);
+    wait_rv = wait(NULL);
+    printf(&quot;done waiting for %d.wait returned: %d\n&quot;,childpid,wait_rv);
+}
+</code></pre>
+<p>wait&#x963B;&#x585E;&#x8C03;&#x7528;&#x5B83;&#x7684;&#x7A0B;&#x5E8F;&#x76F4;&#x5230;&#x5B50;&#x8FDB;&#x7A0B;&#x7ED3;&#x675F;&#xFF0C;wait&#x8FD4;&#x56DE;&#x7ED3;&#x675F;&#x8FDB;&#x7A0B;&#x7684;PID</p>
+</li>
+</ol>
+</li>
+<li><p>shell&#x5982;&#x4F55;&#x8FD0;&#x884C;&#x7A0B;&#x5E8F;</p>
+<ol>
+<li>&#x6253;&#x5370;&#x63D0;&#x793A;&#x7B26;write</li>
+<li>&#x53D6;&#x5F97;&#x547D;&#x4EE4;read</li>
+<li>&#x5EFA;&#x7ACB;&#x65B0;&#x8FDB;&#x7A0B;fork</li>
+<li>&#x7B49;&#x5F85;&#x5B50;&#x8FDB;&#x7A0B;wait<ol>
+<li>&#x5B50;&#x8FDB;&#x7A0B;<ol>
+<li>&#x8FD0;&#x884C;&#x65B0;&#x7A0B;&#x5E8F;exec</li>
+<li>&#x65B0;&#x7A0B;&#x5E8F;&#x5728;&#x8FD0;&#x884C;main</li>
+<li>&#x65B0;&#x7A0B;&#x5E8F;&#x7ED3;&#x675F;exit</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>&#x5F97;&#x5230;&#x5B50;&#x8FDB;&#x7A0B;&#x72B6;&#x6001;</li>
+<li>......&#x4E00;&#x76F4;&#x5FAA;&#x73AF;</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
 
                                 
                                 </section>
@@ -528,7 +721,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Linux","level":"1.8","depth":1,"next":{"title":"DesignPattern","level":"1.9","depth":1,"path":"DesignPattern/README.md","ref":"DesignPattern/README.md","articles":[]},"previous":{"title":"Network Security","level":"1.7","depth":1,"path":"NetworkSecurity/README.md","ref":"NetworkSecurity/README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Linux/README.md","mtime":"2020-03-05T10:00:34.679Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-12T11:59:58.663Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Linux","level":"1.8","depth":1,"next":{"title":"DesignPattern","level":"1.9","depth":1,"path":"DesignPattern/README.md","ref":"DesignPattern/README.md","articles":[]},"previous":{"title":"Network Security","level":"1.7","depth":1,"path":"NetworkSecurity/README.md","ref":"NetworkSecurity/README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Linux/unix编程.md","mtime":"2020-03-10T13:11:49.529Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-03-13T06:40:37.438Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
@@ -536,6 +729,10 @@
         
     <script src="../gitbook/gitbook.js"></script>
     <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
     
         
         <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
